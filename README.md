@@ -21,11 +21,21 @@ const name = localSignal(
 S.root(() => {
 	S(() => console.log(`Hello, ${name()}!`));
 
+	// Signal -> Storage binding
 	console.log(localStorage.getItem('user.name')); //-> Josh
 	name('Dylan'); // logs "Hello, Dylan!"
 	console.log(localStorage.getItem('user.name')); //-> Dylan
+
+	// Storage -> Signal binding
 	localStorage.setItem('user.name', 'Brad'); // logs "Hello, Brad!"
 	console.log(name()); //-> Brad
+
+	// Deletion (storage item gets removed entirely)
+	name(null);
+	localStorage.getItem('user.name'); //-> null
+	name("Cynthia");
+	localStorage.removeItem('user.name'); // logs "Hello, null!"
+	name(); //-> null
 });
 ```
 
