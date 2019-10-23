@@ -10,7 +10,7 @@ $ npm i --save s-storage
 
 ```javascript
 // `localSignal` and `sessionSignal` have the exact same API.
-import {localSignal, sessionSignal} from 's-localstorage';
+import {localSignal, sessionSignal} from 's-storage';
 
 const name = localSignal(
 	'user.name', // localStorage key to bind to
