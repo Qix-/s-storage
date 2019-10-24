@@ -3,34 +3,44 @@ import S from 's-js';
 let hasWarnedLocal = false;
 let hasWarnedSession = false;
 
-function makeStorageSignal(driver, sig, key, initValue) {
+function makeStorageSignal(driver, sig, key, initValue, transform) {
+	const serialize = (transform || {}).stringify || (v => v);
+	const deserialize = (transform || {}).parse || (v => v);
+
+	let paused = false;
+
 	S.on(sig, () => {
 		if (sig() === null) {
 			driver.removeItem(key);
 			return;
 		}
 
-		const existing = driver.getItem(key);
-		if (existing !== sig()) {
-			driver.setItem(key, sig());
+		try {
+			paused = true;
+			driver.setItem(key, serialize(sig()));
+		} finally {
+			paused = false;
 		}
 	}, null, true);
 
 	window.addEventListener('storage', e => {
-		if (e.isTrusted && e.key === key) {
-			sig(e.newValue);
+		if (!paused && e.isTrusted && e.key === key) {
+			sig(deserialize(e.newValue));
 		}
 	});
 
 	let existing = driver.getItem(key);
-	if (existing === null) existing = initValue;
-	sig(existing);
+	if (existing === null) {
+		sig(initValue);
+	} else {
+		sig(deserialize(existing));
+	}
 
 	return sig;
 }
 
-export function localSignal(key, initValue = null, signalFactory = S.value) {
-	const sig = signalFactory(initValue);
+export function localSignal(key, {init=null, factory=S.value, transform=JSON} = {}) {
+	const sig = factory(init);
 
 	if (typeof localStorage !== 'object') {
 		if (!hasWarnedLocal) {
@@ -45,12 +55,13 @@ export function localSignal(key, initValue = null, signalFactory = S.value) {
 		localStorage,
 		sig,
 		key,
-		initValue
+		init,
+		transform
 	);
 }
 
-export function sessionSignal(key, initValue = null, signalFactory = S.value) {
-	const sig = signalFactory(initValue);
+export function sessionSignal(key, {init=null, factory=S.value, transform=JSON} = {}) {
+	const sig = factory(init);
 
 	if (typeof sessionStorage !== 'object') {
 		if (!hasWarnedSession) {
@@ -65,6 +76,7 @@ export function sessionSignal(key, initValue = null, signalFactory = S.value) {
 		sessionStorage,
 		sig,
 		key,
-		initValue
+		init,
+		transform
 	);
 }

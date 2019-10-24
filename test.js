@@ -23,8 +23,12 @@ const Root = ({greeting, firstName, lastName}) => (
 );
 
 S.root(() => {
-	const firstName = sessionSignal("myapp.name.first"/* , null, S.value */);
-	const lastName = localSignal("myapp.name.last", "Mustermann", S.data);
+	const firstName = sessionSignal("myapp.name.first");
+	const lastName = localSignal("myapp.name.last", {
+		init: "Mustermann",
+		factory: S.data,
+		transform: null
+	});
 
 	const greeting = S.value();
 
