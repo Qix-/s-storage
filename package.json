@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "A localStorage and sessionStorage data binding for S.js signals",
   "main": "index.js",
+  "repository": "github:qix-/s-storage",
   "files": [
     "index.js"
   ],
