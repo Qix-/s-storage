@@ -34,7 +34,7 @@ export function localSignal(key, initValue = null, signalFactory = S.value) {
 
 	if (typeof localStorage !== 'object') {
 		if (!hasWarnedLocal) {
-			console.warning('localStorage is invalid (either not defined or not an object); s-storage will not persist anything!');
+			console.warn('localStorage is invalid (either not defined or not an object); s-storage will not persist anything!');
 			hasWarnedLocal = true;
 		}
 
@@ -54,7 +54,7 @@ export function sessionSignal(key, initValue = null, signalFactory = S.value) {
 
 	if (typeof sessionStorage !== 'object') {
 		if (!hasWarnedSession) {
-			console.warning('sessionStorage is invalid (either not defined or not an object); s-storage will not persist anything!');
+			console.warn('sessionStorage is invalid (either not defined or not an object); s-storage will not persist anything!');
 			hasWarnedSession = true;
 		}
 
