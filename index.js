@@ -10,7 +10,7 @@ function makeStorageSignal(driver, sig, key, initValue, transform) {
 	let paused = false;
 
 	S.on(sig, () => {
-		if (sig() === null) {
+		if (sig() === undefined) {
 			driver.removeItem(key);
 			return;
 		}
@@ -21,7 +21,7 @@ function makeStorageSignal(driver, sig, key, initValue, transform) {
 		} finally {
 			paused = false;
 		}
-	}, null, true);
+	}, undefined, true);
 
 	window.addEventListener('storage', e => {
 		if (!paused && e.isTrusted && e.key === key) {
