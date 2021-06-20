@@ -1,6 +1,6 @@
 {
   "name": "s-storage",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "description": "A localStorage and sessionStorage data binding for S.js signals",
   "main": "index.js",
   "repository": "github:qix-/s-storage",
